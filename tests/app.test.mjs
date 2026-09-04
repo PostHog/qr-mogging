@@ -6,7 +6,7 @@ import { createCanvas, Image } from '@napi-rs/canvas';
 
 test('native controls preserve preview and download safeguards', async (t) => {
   const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
-  assert.doesNotMatch(html, /ready-status|status-text/);
+  assert.equal(/ready-status|status-text|preview-titlebar/.test(html), false);
   const logo = readFileSync(new URL('../public/posthog-logomark.png', import.meta.url));
   const timers = new Map();
   const downloads = [];
