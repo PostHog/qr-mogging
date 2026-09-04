@@ -55,6 +55,7 @@ test('only a completed result for the current URL and logo can be downloaded', (
   const result = {
     url: 'https://posthog.com/',
     logoSource: 'old-logo',
+    logoSize: 22,
     dataUrl: 'data:image/png;base64,complete',
   };
   assert.equal(readyQr(null, result.url, result.logoSource), null);
@@ -63,6 +64,7 @@ test('only a completed result for the current URL and logo can be downloaded', (
     null,
   );
   assert.equal(readyQr(result, result.url, 'new-logo'), null);
+  assert.equal(readyQr(result, result.url, result.logoSource, 30), null);
   assert.equal(readyQr(result, result.url, result.logoSource), result);
 });
 
@@ -116,14 +118,34 @@ async function decodedUrl(dataUrl, size = 1080) {
   return jsQR(pixels.data, size, size)?.data;
 }
 
-for (const [label, url, logo] of cases) {
-  test(`exported PNG decodes correctly: ${label}`, async () => {
+for (const logoSize of [10, 16, 22, 26, 30]) {
+  for (const [label, url, logo] of cases) {
+    test(`exported PNG decodes correctly: ${label} at ${logoSize}%`, async () => {
+      browserCanvas();
+      const result = await renderQrCode(url, logo, logoSize);
+      assert.equal(result.logoSize, logoSize);
+      assert.match(result.dataUrl, /^data:image\/png;base64,/);
+      assert.equal(await decodedUrl(result.dataUrl), url);
+      if (label !== 'tracking URL')
+        assert.equal(await decodedUrl(result.dataUrl, 280), url);
+    });
+  }
+}
+
+test('changing the slider size changes the exported image', async () => {
+  browserCanvas();
+  const small = await renderQrCode('https://posthog.com/', mark, 10);
+  const large = await renderQrCode('https://posthog.com/', mark, 30);
+  assert.notEqual(small.dataUrl, large.dataUrl);
+});
+
+for (const size of [0, 9, 31, 100, Number.NaN, Number.POSITIVE_INFINITY]) {
+  test(`rejects image sizes outside the supported range: ${size}`, async () => {
     browserCanvas();
-    const result = await renderQrCode(url, logo);
-    assert.match(result.dataUrl, /^data:image\/png;base64,/);
-    assert.equal(await decodedUrl(result.dataUrl), url);
-    if (label !== 'tracking URL')
-      assert.equal(await decodedUrl(result.dataUrl, 280), url);
+    await assert.rejects(
+      renderQrCode('https://posthog.com/', mark, size),
+      /image size/i,
+    );
   });
 }
 

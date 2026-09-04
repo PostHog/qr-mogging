@@ -1,11 +1,15 @@
 import qrcode from 'qrcode-generator';
 
 export const CANVAS_SIZE = 1080;
+export const DEFAULT_LOGO_SIZE = 22;
+export const MIN_LOGO_SIZE = 10;
+export const MAX_LOGO_SIZE = 30;
 const QUIET_ZONE = 4;
 
 export type QrResult = {
   url: string;
   logoSource: string;
+  logoSize: number;
   dataUrl: string;
 };
 
@@ -56,8 +60,11 @@ export function readyQr(
   result: QrResult | null,
   url: string,
   logoSource: string,
+  logoSize = DEFAULT_LOGO_SIZE,
 ) {
-  return result?.url === url && result.logoSource === logoSource
+  return result?.url === url &&
+    result.logoSource === logoSource &&
+    result.logoSize === logoSize
     ? result
     : null;
 }
@@ -129,7 +136,18 @@ export function readImageFile(file: File) {
 export async function renderQrCode(
   url: string,
   logoSource: string,
+  logoSize = DEFAULT_LOGO_SIZE,
 ): Promise<QrResult> {
+  if (
+    !Number.isFinite(logoSize) ||
+    logoSize < MIN_LOGO_SIZE ||
+    logoSize > MAX_LOGO_SIZE
+  ) {
+    throw new QrError(
+      'render',
+      `Choose an image size between ${MIN_LOGO_SIZE}% and ${MAX_LOGO_SIZE}%.`,
+    );
+  }
   const code = qrcode(0, 'H');
   try {
     code.addData(url);
@@ -172,8 +190,8 @@ export async function renderQrCode(
   }
 
   const codeArea = modules * moduleSize;
-  const badgeSize = Math.round(codeArea * 0.22);
-  const plateSize = Math.round(codeArea * 0.265);
+  const badgeSize = Math.round((codeArea * logoSize) / 100);
+  const plateSize = Math.round((codeArea * (logoSize + 4.5)) / 100);
   context.fillStyle = '#fff';
   context.beginPath();
   context.roundRect(
@@ -194,5 +212,5 @@ export async function renderQrCode(
     width,
     height,
   );
-  return { url, logoSource, dataUrl: canvas.toDataURL('image/png') };
+  return { url, logoSource, logoSize, dataUrl: canvas.toDataURL('image/png') };
 }

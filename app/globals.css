@@ -207,6 +207,65 @@ a:focus-visible {
 .reset-button:hover {
   text-decoration: underline;
 }
+.image-size-control {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 4ch;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  font-size: 0.875rem;
+}
+.image-size-control label {
+  font-weight: 700;
+}
+.image-size-control output {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.image-size-control input {
+  width: 100%;
+  min-width: 0;
+  height: 28px;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.image-size-control input:focus-visible {
+  outline: 3px solid #9b7000;
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+.image-size-control input::-webkit-slider-runnable-track {
+  height: 6px;
+  border: 1px solid #8b897e;
+  border-radius: 999px;
+  background: #e4e1d2;
+}
+.image-size-control input::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+  margin-top: -8px;
+  appearance: none;
+  border: 1px solid var(--foreground);
+  border-radius: 50%;
+  background: var(--yellow);
+  box-shadow: 1px 1px 0 var(--foreground);
+}
+.image-size-control input::-moz-range-track {
+  height: 4px;
+  border: 1px solid #8b897e;
+  border-radius: 999px;
+  background: #e4e1d2;
+}
+.image-size-control input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--foreground);
+  border-radius: 50%;
+  background: var(--yellow);
+  box-shadow: 1px 1px 0 var(--foreground);
+}
 .upload-card {
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr) auto;
@@ -395,7 +454,7 @@ a:focus-visible {
     min-height: 44px;
   }
   .workspace {
-    padding-top: 14px;
+    padding: 14px 0 12px;
   }
   .page-heading {
     display: block;
@@ -426,7 +485,7 @@ a:focus-visible {
     padding: 12px 16px 14px;
   }
   .qr-stage {
-    width: min(100%, 220px, 30svh);
+    width: min(100%, 210px, 30svh);
   }
   .encoded-url {
     margin-top: 8px;

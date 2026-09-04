@@ -5,6 +5,9 @@ import { ArrowDownToLine, ImagePlus, Link2, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
+  DEFAULT_LOGO_SIZE,
+  MIN_LOGO_SIZE,
+  MAX_LOGO_SIZE,
   loadImage,
   normalizeUrl,
   QrError,
@@ -18,6 +21,7 @@ type LogoChoice = { src: string; name: string; isDefault: boolean };
 type RenderState = {
   url: string;
   logoSource: string;
+  logoSize: number;
   result: QrResult | null;
   error?: QrError;
 };
@@ -43,15 +47,23 @@ const defaultLogo: LogoChoice = {
 export default function Home() {
   const [inputUrl, setInputUrl] = useState('posthog.com');
   const [logo, setLogo] = useState<LogoChoice>(defaultLogo);
+  const [logoSize, setLogoSize] = useState(DEFAULT_LOGO_SIZE);
   const [uploadError, setUploadError] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [renderState, setRenderState] = useState<RenderState | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadVersion = useRef(0);
   const normalized = useMemo(() => normalizeUrl(inputUrl), [inputUrl]);
-  const result = readyQr(renderState?.result ?? null, normalized.url, logo.src);
+  const result = readyQr(
+    renderState?.result ?? null,
+    normalized.url,
+    logo.src,
+    logoSize,
+  );
   const renderError =
-    renderState?.url === normalized.url && renderState.logoSource === logo.src
+    renderState?.url === normalized.url &&
+    renderState.logoSource === logo.src &&
+    renderState.logoSize === logoSize
       ? renderState.error
       : undefined;
   const urlError =
@@ -114,12 +126,13 @@ export default function Home() {
     if (!normalized.url) return;
     let active = true;
     const timer = window.setTimeout(() => {
-      void renderQrCode(normalized.url, logo.src)
+      void renderQrCode(normalized.url, logo.src, logoSize)
         .then((completed) => {
           if (active)
             setRenderState({
               url: normalized.url,
               logoSource: logo.src,
+              logoSize,
               result: completed,
             });
         })
@@ -128,6 +141,7 @@ export default function Home() {
             setRenderState({
               url: normalized.url,
               logoSource: logo.src,
+              logoSize,
               result: null,
               error:
                 error instanceof QrError
@@ -143,7 +157,7 @@ export default function Home() {
       active = false;
       window.clearTimeout(timer);
     };
-  }, [logo.src, normalized.url]);
+  }, [logo.src, normalized.url, logoSize]);
 
   const chooseFile = async (file?: File) => {
     if (!file) return;
@@ -304,6 +318,26 @@ export default function Home() {
                   {uploadError}
                 </p>
               )}
+              <div className="image-size-control">
+                <label htmlFor="image-size">Image size</label>
+                <input
+                  id="image-size"
+                  type="range"
+                  min={MIN_LOGO_SIZE}
+                  max={MAX_LOGO_SIZE}
+                  step={1}
+                  value={logoSize}
+                  onChange={(event) => setLogoSize(Number(event.target.value))}
+                  aria-valuetext={`${logoSize} percent of the QR width`}
+                  aria-describedby="image-size-help"
+                />
+                <output htmlFor="image-size">{logoSize}%</output>
+              </div>
+              <p className="field-message" id="image-size-help">
+                {logoSize > 25
+                  ? 'Larger images can be harder to scan. Test before printing.'
+                  : '22% recommended. Scan-test before printing.'}
+              </p>
             </section>
           </div>
           <aside className="preview-panel" aria-label="QR code preview">

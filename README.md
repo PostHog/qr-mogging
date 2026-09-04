@@ -37,7 +37,9 @@ in the browser.
 - Supports HTTP and HTTPS URLs; missing schemes default to HTTPS.
 - Accepts PNG, JPEG, WebP, GIF, and SVG images up to 5 MB. GIFs become a static image.
 - Keeps the selected image if a replacement cannot be decoded.
-- Enables Download only for a complete result matching the current URL and image.
+- Adjusts the center image from 10% to 30% of the QR width (22% by default).
+- Larger images cover more QR data and can reduce scan reliability, even with high error correction.
+- Enables Download only for a complete result matching the current URL, image, and size.
 - Uses high QR error correction and a four-module clear margin.
 
 The tests decode the actual generated PNGs, including long URLs, different logo
