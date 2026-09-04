@@ -65,33 +65,23 @@ function updateView() {
     ? "Larger images can be harder to scan. Test before printing."
     : "22% recommended. Scan-test before printing.";
 
-  element("ready-status").classList.toggle("ready", isReady);
-  element("status-text").textContent = urlError
-    ? "Check URL"
-    : previewError
-      ? "Check image"
-      : isUploading
-        ? "Checking image…"
-        : isReady
-          ? "Ready"
-          : "Updating…";
   element("qr-stage").setAttribute("aria-busy", !isReady && !urlError && !previewError);
   const preview = element("qr-preview");
-  preview.hidden = !completed;
-  if (completed) {
+  preview.hidden = !isReady;
+  if (isReady) {
     preview.src = completed.dataUrl;
     preview.alt = `QR code for ${completed.url}`;
   } else {
     preview.removeAttribute("src");
   }
-  element("preview-placeholder").hidden = Boolean(completed);
+  element("preview-placeholder").hidden = isReady;
   element("preview-placeholder").textContent = urlError
     ? "Add a valid web URL to see your code."
-    : previewError || "Making your QR code…";
+    : previewError || (isUploading ? "Checking image…" : "Making your QR code…");
   showError("preview-error", previewError);
-  element("encoded-url").title = completed?.url || "";
+  element("encoded-url").title = normalized.url;
   element("encoded-url-text").textContent =
-    completed?.url || (urlError ? "Waiting for a valid URL" : "Updating preview…");
+    normalized.url || "Waiting for a valid URL";
   element("download-qr").disabled = !isReady;
 }
 

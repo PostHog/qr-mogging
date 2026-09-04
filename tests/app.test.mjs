@@ -6,6 +6,7 @@ import { createCanvas, Image } from '@napi-rs/canvas';
 
 test('native controls preserve preview and download safeguards', async (t) => {
   const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
+  assert.doesNotMatch(html, /ready-status|status-text/);
   const logo = readFileSync(new URL('../public/posthog-logomark.png', import.meta.url));
   const timers = new Map();
   const downloads = [];
@@ -53,6 +54,9 @@ test('native controls preserve preview and download safeguards', async (t) => {
   t.mock.method(globalThis, 'clearTimeout', (id) => timers.delete(id));
   get('destination-url').value = 'posthog.com';
   await import('../public/app.js');
+  assert.equal(get('qr-preview').hidden, true);
+  assert.equal(get('preview-placeholder').hidden, false);
+  assert.equal(get('qr-stage').attributes.get('aria-busy'), 'true');
 
   async function render() {
     const pending = [...timers.values()];
@@ -66,7 +70,10 @@ test('native controls preserve preview and download safeguards', async (t) => {
   async function upload(file) {
     get('image-file').files = [file];
     get('image-file').dispatchEvent(new Event('change'));
-    for (let attempt = 0; get('status-text').textContent === 'Checking image…'; attempt++) {
+    assert.equal(get('qr-preview').hidden, true);
+    assert.equal(get('preview-placeholder').hidden, false);
+    assert.equal(get('preview-placeholder').textContent, 'Checking image…');
+    for (let attempt = 0; get('preview-placeholder').textContent === 'Checking image…'; attempt++) {
       assert.ok(attempt < 100, 'image upload settles');
       await delay(10);
     }
@@ -74,23 +81,32 @@ test('native controls preserve preview and download safeguards', async (t) => {
 
   await render();
   assert.equal(get('download-qr').disabled, false);
+  assert.equal(get('qr-preview').hidden, false);
+  assert.equal(get('preview-placeholder').hidden, true);
+  assert.equal(get('qr-stage').attributes.get('aria-busy'), 'false');
   assert.equal(get('image-size-value').textContent, '22%');
   const originalPreview = get('qr-preview').src;
 
   for (const size of [30, 10, 22]) {
     input('image-size', size);
     assert.equal(get('download-qr').disabled, true);
+    assert.equal(get('qr-preview').hidden, true);
+    assert.equal(get('preview-placeholder').hidden, false);
+    assert.equal(get('preview-placeholder').textContent, 'Making your QR code…');
     get('download-qr').click();
     assert.equal(downloads.length, 0);
     assert.equal(get('image-size-help').classes.has('caution'), size > 25);
     await render();
     assert.equal(get('download-qr').disabled, false);
+    assert.equal(get('preview-placeholder').hidden, true);
     assert.equal(get('qr-preview').src === originalPreview, size === 22);
   }
 
   input('destination-url', 'javascript:alert(1)');
   assert.equal(get('download-qr').disabled, true);
   assert.equal(get('qr-preview').hidden, true);
+  assert.equal(get('qr-stage').attributes.get('aria-busy'), 'false');
+  assert.equal(get('preview-placeholder').textContent, 'Add a valid web URL to see your code.');
   assert.equal(get('url-help').attributes.get('role'), 'alert');
   input('destination-url', 'example.com');
   input('destination-url', 'posthog.com/events');
@@ -101,6 +117,8 @@ test('native controls preserve preview and download safeguards', async (t) => {
   assert.match(get('upload-error').textContent, /previous image is still selected/);
   assert.equal(get('logo-name').textContent, 'PostHog');
   assert.equal(get('download-qr').disabled, false);
+  assert.equal(get('qr-preview').hidden, false);
+  assert.equal(get('preview-placeholder').hidden, true);
 
   await upload(new File([logo], 'custom.png', { type: 'image/png' }));
   assert.equal(get('reset-logo').hidden, false);

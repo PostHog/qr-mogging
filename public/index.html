@@ -157,15 +157,12 @@
           <aside class="preview-panel" aria-label="QR code preview">
             <div class="preview-titlebar">
               <h2>Preview</h2>
-              <output id="ready-status" class="ready-pill" aria-live="polite"
-                ><span aria-hidden="true"></span><span id="status-text">Updating…</span></output
-              >
             </div>
             <div class="preview-body">
               <div id="qr-stage" class="qr-stage" aria-busy="true">
                 <!-- The preview is the exact generated PNG used for download. -->
                 <img id="qr-preview" class="qr-image" width="1080" height="1080" alt="" hidden />
-                <p id="preview-placeholder" class="preview-placeholder">Making your QR code…</p>
+                <p id="preview-placeholder" class="preview-placeholder" role="status">Making your QR code…</p>
               </div>
               <p id="preview-error" class="field-message error" role="alert" hidden></p>
               <p id="encoded-url" class="encoded-url">
@@ -182,7 +179,7 @@
                 >
                   <path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 1 1 0 10h-2M8 12h8" />
                 </svg>
-                <span id="encoded-url-text">Updating preview…</span>
+                <span id="encoded-url-text">https://posthog.com/</span>
               </p>
               <button type="button" id="download-qr" class="download-button" disabled>
                 <svg
