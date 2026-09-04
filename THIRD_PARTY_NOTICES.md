@@ -11,10 +11,17 @@ the [PostHog website license](https://github.com/PostHog/posthog.com/blob/master
 for the original asset terms. The MIT license does not grant rights to use the
 PostHog name, logos, or fonts outside their permitted use.
 
-## shadcn/ui
+## QR encoder and icons
 
-The button and input components are based on shadcn/ui, licensed under MIT.
-Copyright (c) 2023 shadcn.
+`public/vendor/qrcode.js` is qrcode-generator 1.4.4 by Kazuhiko Arase,
+licensed under MIT. Its AMD/CommonJS export wrapper was replaced with an ES
+module export; the encoder itself is unchanged.
+
+Copyright (c) 2009 Kazuhiko Arase
+
+The inline link icon is derived from Feather, via Lucide, under MIT.
+
+Copyright (c) 2013-present Cole Bemis
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,9 +41,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Package dependencies
+The inline interface icons are from Lucide 1.31.0, under the ISC license:
 
-Packages installed by npm, including React, Vinext, qrcode-generator, Base UI,
-and Lucide, retain their own licenses. Their source and license notices are
-distributed in the corresponding npm packages. QR decoder and native canvas
-packages are used for tests only, and are not shipped to the browser.
+Copyright (c) 2026 Lucide Icons and Contributors
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+## Test-only package dependencies
+
+`@napi-rs/canvas` and `jsqr` retain their own licenses, distributed in their
+npm packages. Neither is shipped to the browser.

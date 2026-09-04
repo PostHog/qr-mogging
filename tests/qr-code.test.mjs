@@ -8,7 +8,7 @@ import {
   normalizeUrl,
   readyQr,
   renderQrCode,
-} from '../lib/qr-code.ts';
+} from '../public/qr-code.js';
 
 const originalImage = globalThis.Image;
 const originalDocument = globalThis.document;

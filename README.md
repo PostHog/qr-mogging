@@ -10,27 +10,33 @@ managed by HostHog.
 
 ## Development
 
-Requires Node.js 22.13 or newer and npm.
+The site is plain HTML, CSS, and JavaScript in `public/`. Serve that folder
+with any static web server. No package install or build is required.
+
+For the included local server, use Node.js 22.13 or newer:
 
 ```sh
-npm ci
 npm run dev
 ```
 
-Open the local URL printed by the development server.
+Open the local URL printed by the server. Refresh after editing.
+
+Only the automated tests need npm packages:
 
 ```sh
-npm run lint
+npm ci
+npm run check
 npm test
 npm run build
 ```
 
-The production build is a static site in `dist/client`. Upload that directory's
-contents to a static host. No application server is needed in production.
+`npm run build` just copies the site and license notices into `dist/` for
+deployment. Upload that directory's contents to a static host.
 
-The UI uses React and Vinext, with a locally bundled QR encoder. It is not a
-dependency-free source project. QR generation and image selection run locally
-in the browser.
+There are no npm runtime dependencies, frameworks, bundlers, or CDN requests.
+The proven `qrcode-generator` 1.4.4 encoder is vendored locally with its license;
+it is still third-party code. The two dev dependencies, native canvas and jsQR,
+are used only to test the generated images and are never shipped to the browser.
 
 ## Behavior
 
@@ -47,10 +53,13 @@ shapes, and overlapping renders. Test a physical scan before a large print run.
 
 ## Source layout
 
-- `app/page.tsx`: interface and current preview state.
-- `app/globals.css`: layout and PostHog styling.
-- `lib/qr-code.ts`: URL validation, image loading, and PNG rendering.
-- `tests/qr-code.test.mjs`: regression and QR decoding tests.
+- `public/index.html`: the interface.
+- `public/styles.css`: layout and PostHog styling.
+- `public/app.js`: events and current preview state.
+- `public/qr-code.js`: URL validation, image loading, and PNG rendering.
+- `public/vendor/qrcode.js`: the QR encoder (only its module export is adapted).
+- `scripts/`: dependency-free preview and deployment-copy helpers.
+- `tests/`: regression and QR decoding tests.
 
 ## License
 

@@ -1,36 +1,18 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
-@import 'shadcn/tailwind.css';
-
 @font-face {
   font-family: RoundHog;
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/roundhog-regular.woff2') format('woff2');
+  src: url("roundhog-regular.woff2") format("woff2");
 }
 @font-face {
   font-family: RoundHog;
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('/roundhog-semibold.woff2') format('woff2');
+  src: url("roundhog-semibold.woff2") format("woff2");
 }
 
-@custom-variant dark (&:is(.dark *));
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--foreground);
-  --color-primary-foreground: var(--card);
-  --color-muted: #efeee3;
-  --color-muted-foreground: #65665f;
-  --color-destructive: #b22d1d;
-  --color-border: #b8b6ac;
-  --color-input: #88877e;
-  --color-ring: #d6a51b;
-  --font-sans: RoundHog, ui-sans-serif, system-ui, sans-serif;
-}
 :root {
   --background: #f2f1df;
   --foreground: #1d1f1e;
@@ -42,6 +24,18 @@
 * {
   box-sizing: border-box;
 }
+[hidden] {
+  display: none !important;
+}
+h1,
+h2,
+p {
+  margin: 0;
+}
+svg {
+  display: block;
+  flex-shrink: 0;
+}
 html {
   min-width: 320px;
 }
@@ -50,10 +44,7 @@ body {
   margin: 0;
   color: var(--foreground);
   background-color: var(--background);
-  background-image: radial-gradient(
-    rgb(29 31 30 / 7%) 0.7px,
-    transparent 0.7px
-  );
+  background-image: radial-gradient(rgb(29 31 30 / 7%) 0.7px, transparent 0.7px);
   background-size: 18px 18px;
   font-family: RoundHog, ui-sans-serif, system-ui, sans-serif;
   font-size: 1rem;
@@ -69,6 +60,19 @@ a {
 }
 button {
   cursor: pointer;
+}
+.upload-button,
+.download-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.upload-button svg,
+.download-button svg {
+  width: 16px;
+  height: 16px;
 }
 button:focus-visible,
 a:focus-visible {
@@ -163,15 +167,17 @@ a:focus-visible {
   color: #65665f;
 }
 .url-field {
-  height: auto !important;
+  width: 100%;
+  min-width: 0;
+  height: auto;
   min-height: 42px;
-  border: 0 !important;
-  padding: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  background: transparent !important;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
   color: var(--foreground);
-  font-size: 1rem !important;
+  font-size: 1rem;
 }
 .url-field:focus-visible {
   outline: none;
@@ -221,6 +227,23 @@ a:focus-visible {
 .image-size-control output {
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+.image-size-notice {
+  margin: 6px 0 0;
+  border: 1px solid #c9b465;
+  border-radius: 5px;
+  padding: 7px 10px;
+  background: #fff2bd;
+  color: #514111;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+.image-size-notice.caution {
+  border-color: #b9821c;
+  background: #ffe5a3;
+  color: #593900;
 }
 .image-size-control input {
   width: 100%;
@@ -313,18 +336,18 @@ a:focus-visible {
   margin-top: 2px;
 }
 .upload-button {
-  height: 40px !important;
-  border: 1px solid var(--foreground) !important;
-  border-radius: 5px !important;
-  padding: 0 10px !important;
-  background: var(--card) !important;
-  color: var(--foreground) !important;
-  font-size: 0.875rem !important;
-  font-weight: 700 !important;
+  height: 40px;
+  border: 1px solid var(--foreground);
+  border-radius: 5px;
+  padding: 0 10px;
+  background: var(--card);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 700;
   box-shadow: 1px 1px 0 var(--foreground);
 }
 .upload-button:hover {
-  background: #fff1b8 !important;
+  background: #fff1b8;
 }
 .preview-panel {
   min-width: 0;
@@ -353,13 +376,13 @@ a:focus-visible {
   color: #45473c;
   font-size: 0.75rem;
 }
-.ready-pill > span {
+.ready-pill > span:first-child {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: #8b6c21;
 }
-.ready-pill.ready > span {
+.ready-pill.ready > span:first-child {
   background: #237646;
 }
 .preview-body {
@@ -406,18 +429,18 @@ a:focus-visible {
 }
 .download-button {
   width: 100%;
-  height: 44px !important;
+  height: 44px;
   margin-top: 12px;
-  border: 1px solid var(--foreground) !important;
-  border-radius: 5px !important;
-  background: var(--yellow) !important;
-  color: var(--foreground) !important;
-  font-size: 0.875rem !important;
-  font-weight: 700 !important;
+  border: 1px solid var(--foreground);
+  border-radius: 5px;
+  background: var(--yellow);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 700;
   box-shadow: 2px 2px 0 var(--foreground);
 }
 .download-button:hover {
-  background: #ffca2f !important;
+  background: #ffca2f;
 }
 .download-button:disabled {
   cursor: not-allowed;
@@ -439,7 +462,7 @@ a:focus-visible {
     padding: 6px;
   }
   .upload-button {
-    padding: 0 8px !important;
+    padding: 0 8px;
   }
   .upload-button svg {
     display: none;
@@ -454,11 +477,11 @@ a:focus-visible {
     min-height: 44px;
   }
   .workspace {
-    padding: 14px 0 12px;
+    padding: 12px 0 10px;
   }
   .page-heading {
     display: block;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   .page-heading h1 {
     font-size: 1.75rem;
@@ -469,8 +492,11 @@ a:focus-visible {
   .maker-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+  .control-panel {
+    padding: 12px 16px;
+  }
   .image-section {
-    margin-top: 18px;
+    margin-top: 12px;
   }
   .preview-panel {
     border-left: 0;
@@ -485,7 +511,7 @@ a:focus-visible {
     padding: 12px 16px 14px;
   }
   .qr-stage {
-    width: min(100%, 210px, 30svh);
+    width: min(100%, 190px, 30svh);
   }
   .encoded-url {
     margin-top: 8px;
@@ -501,6 +527,6 @@ a:focus-visible {
   *,
   *::before,
   *::after {
-    transition-duration: 0.01ms !important;
+    transition-duration: 0.01ms;
   }
 }

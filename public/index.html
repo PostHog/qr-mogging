@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QR Mogging | PostHog internal tools</title>
+    <meta name="description" content="Make prettier QR codes fastererer" />
+    <link rel="canonical" href="https://qr-mogging.hosthog.dev/" />
+    <link rel="icon" href="posthog-mark.svg" type="image/svg+xml" />
+    <meta property="og:title" content="QR Mogging | PostHog internal tools" />
+    <meta property="og:description" content="Make prettier QR codes fastererer" />
+    <meta property="og:url" content="https://qr-mogging.hosthog.dev/" />
+    <meta property="og:site_name" content="PostHog internal tools" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://qr-mogging.hosthog.dev/og.png" />
+    <meta property="og:image:width" content="1733" />
+    <meta property="og:image:height" content="908" />
+    <meta property="og:image:alt" content="QR Mogging — PostHog internal tools" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="QR Mogging | PostHog internal tools" />
+    <meta name="twitter:description" content="Make prettier QR codes fastererer" />
+    <meta name="twitter:image" content="https://qr-mogging.hosthog.dev/og.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-bar">
+        <div class="app-bar-inner">
+          <a class="posthog-brand" href="#top" aria-label="PostHog internal tools">
+            <img src="posthog-logo.svg" alt="PostHog" width="112" height="24" />
+          </a>
+          <span class="internal-tools-label">Internal tools</span>
+        </div>
+      </header>
+      <main class="workspace" id="top">
+        <div class="page-heading">
+          <h1>QR Mogging</h1>
+          <p>Make prettier QR codes fastererer</p>
+        </div>
+        <noscript
+          ><p class="field-message error">Enable JavaScript to generate QR codes.</p></noscript
+        >
+        <section class="maker-grid" aria-label="QR Mogging">
+          <div class="control-panel">
+            <div class="url-section">
+              <label class="field-label" for="destination-url">URL</label>
+              <div class="url-field-wrap">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 1 1 0 10h-2M8 12h8" />
+                </svg>
+                <input
+                  id="destination-url"
+                  class="url-field"
+                  value="posthog.com"
+                  placeholder="posthog.com"
+                  inputmode="url"
+                  autocomplete="url"
+                  autocapitalize="none"
+                  spellcheck="false"
+                  aria-invalid="false"
+                  aria-describedby="url-help"
+                />
+              </div>
+              <p class="field-message" id="url-help">https:// is added when needed.</p>
+            </div>
+            <section class="image-section" aria-labelledby="image-heading">
+              <div class="image-heading">
+                <h2 id="image-heading" class="field-label">Center image</h2>
+                <button
+                  id="reset-logo"
+                  type="button"
+                  class="reset-button"
+                  aria-label="Reset to PostHog logomark"
+                  hidden
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8M3 3v5h5" />
+                  </svg>
+                  Reset
+                </button>
+              </div>
+              <div class="upload-card" id="upload-card">
+                <div class="logo-thumb">
+                  <img id="logo-preview" src="posthog-logomark.png" alt="" />
+                </div>
+                <div class="upload-copy">
+                  <strong id="logo-name" title="PostHog logomark">PostHog</strong>
+                  <span id="logo-kind">Default logo</span>
+                </div>
+                <button type="button" id="choose-image" class="upload-button">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M16 5h6M19 2v6M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5M21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"
+                    />
+                    <circle cx="9" cy="9" r="2" />
+                  </svg>
+                  Choose image
+                </button>
+                <input
+                  id="image-file"
+                  type="file"
+                  hidden
+                  accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+                  aria-label="Choose a custom center image"
+                />
+              </div>
+              <p class="field-message">PNG, JPG, WebP, GIF or SVG · Up to 5 MB</p>
+              <p class="field-message error" id="upload-error" role="alert" hidden></p>
+              <div class="image-size-control">
+                <label for="image-size">Image size</label>
+                <input
+                  id="image-size"
+                  type="range"
+                  min="10"
+                  max="30"
+                  step="1"
+                  value="22"
+                  aria-valuetext="22 percent of the QR width"
+                  aria-describedby="image-size-help"
+                />
+                <output id="image-size-value" for="image-size">22%</output>
+              </div>
+              <p class="image-size-notice" id="image-size-help" aria-live="polite">
+                22% recommended. Scan-test before printing.
+              </p>
+            </section>
+          </div>
+          <aside class="preview-panel" aria-label="QR code preview">
+            <div class="preview-titlebar">
+              <h2>Preview</h2>
+              <output id="ready-status" class="ready-pill" aria-live="polite"
+                ><span aria-hidden="true"></span><span id="status-text">Updating…</span></output
+              >
+            </div>
+            <div class="preview-body">
+              <div id="qr-stage" class="qr-stage" aria-busy="true">
+                <!-- The preview is the exact generated PNG used for download. -->
+                <img id="qr-preview" class="qr-image" width="1080" height="1080" alt="" hidden />
+                <p id="preview-placeholder" class="preview-placeholder">Making your QR code…</p>
+              </div>
+              <p id="preview-error" class="field-message error" role="alert" hidden></p>
+              <p id="encoded-url" class="encoded-url">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 1 1 0 10h-2M8 12h8" />
+                </svg>
+                <span id="encoded-url-text">Updating preview…</span>
+              </p>
+              <button type="button" id="download-qr" class="download-button" disabled>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 17V3m-6 8 6 6 6-6M19 21H5" />
+                </svg>
+                Download PNG
+              </button>
+              <p class="quality-note">1080 × 1080 px · High error correction</p>
+            </div>
+          </aside>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
